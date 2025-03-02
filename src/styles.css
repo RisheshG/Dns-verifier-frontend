@@ -1,0 +1,269 @@
+/* CSS Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* CSS Variables for Color Scheme */
+  :root {
+    --primary-color: #ff6b6b;      /* Bold red/pink */
+    --secondary-color: #feca57;    /* Bright warm yellow/orange */
+    --accent-color: #48dbfb;       /* Vivid blue */
+    --text-color: #2d3436;         /* Dark grey for text */
+    --container-bg: rgba(255, 255, 255, 0.85);
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --transition-speed: 0.5s;
+  }
+  
+  /* Animated Moving Gradient Background for the Entire App */
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: var(--text-color);
+    padding: 20px;
+    min-height: 100vh;
+  }
+  
+  /* Keyframes for Animated Background */
+  @keyframes gradientBG {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  /* Container with Glassmorphism and Fade-In Animation */
+  .container {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 40px;
+    background: var(--container-bg);
+    border-radius: 20px;
+    box-shadow: 0 12px 30px var(--shadow-color);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    animation: fadeInUp 1s ease-out both;
+  }
+  
+  /* Title Styling with Bold Colors and Text Shadow */
+  h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-size: 3rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.15);
+  }
+  
+  /* File Input Styling with Animated Label */
+  .file-input {
+    margin-bottom: 30px;
+    text-align: center;
+    position: relative;
+  }
+  
+  .file-input input[type="file"] {
+    opacity: 0;
+    position: absolute;
+    width: 0;
+    height: 0;
+  }
+  
+  .file-input label {
+    display: inline-block;
+    padding: 15px 30px;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: #fff;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  }
+  
+  .file-input label:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 25px var(--shadow-color);
+  }
+  
+  /* Select Dropdown Styling with Custom Arrow */
+  .select-container {
+    margin-bottom: 30px;
+    position: relative;
+  }
+  
+  .select-container select {
+    width: 100%;
+    padding: 15px 50px 15px 15px;
+    font-size: 1.2rem;
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    background-color: #fff;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%232d3436"><path d="M4 6l4 4 4-4"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+  }
+  
+  .select-container select:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 10px var(--secondary-color);
+  }
+  
+  /* Upload Button Styling with a Subtle Lift on Hover */
+  .upload-button {
+    width: 100%;
+    padding: 18px;
+    font-size: 1.2rem;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background var(--transition-speed), transform var(--transition-speed);
+    margin-bottom: 30px;
+    font-weight: 600;
+  }
+  
+  .upload-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .upload-button:hover:not(:disabled) {
+    transform: translateY(-5px);
+  }
+  
+  /* Progress Bar Styling with Smooth Transitions */
+  .progress-container {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  .progress-container progress {
+    width: 100%;
+    height: 20px;
+    border-radius: 10px;
+    background-color: #e0e0e0;
+    border: none;
+    overflow: hidden;
+  }
+  
+  .progress-container progress::-webkit-progress-bar {
+    background-color: #e0e0e0;
+    border-radius: 10px;
+  }
+  
+  .progress-container progress::-webkit-progress-value {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border-radius: 10px;
+    transition: width var(--transition-speed);
+  }
+  
+  .progress-container progress::-moz-progress-bar {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border-radius: 10px;
+  }
+  
+  /* Processing Message Styling with a Pulsing Effect */
+  .processing-message {
+    margin-top: 30px;
+    text-align: center;
+    font-style: italic;
+    color: var(--accent-color);
+    font-size: 1.3rem;
+    animation: pulse 1.5s infinite;
+  }
+  
+  /* Download Links Styling with Interactive Hover Effects */
+  .download-links {
+    margin-top: 30px;
+  }
+  
+  .download-links h3 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+    font-weight: 600;
+  }
+  
+  .download-links a {
+    display: block;
+    padding: 15px;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50px;
+    margin-bottom: 15px;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+  
+  .download-links a:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px var(--shadow-color);
+  }
+  
+  /* Keyframes for Fade In Up Animation */
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Keyframes for Pulse Animation */
+  @keyframes pulse {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.6;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .container {
+      margin: 20px;
+      padding: 20px;
+    }
+    
+    h2 {
+      font-size: 2.5rem;
+    }
+    
+    .upload-button {
+      padding: 15px;
+      font-size: 1rem;
+    }
+    
+    .select-container select, .file-input label {
+      font-size: 1rem;
+    }
+  }
+  
