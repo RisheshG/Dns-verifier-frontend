@@ -1,16 +1,106 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Papa from "papaparse";
-import "./styles.css"; // Import the CSS file
+import "./styles.css";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore"; // Use Firestore (or Realtime Database)
+
+// Firebase configuration (replace with your Firebase project config)
+const firebaseConfig = {
+    apiKey: "AIzaSyBPAKJ_QWehMaas3GQm75P2ceYYPKO7iC0",
+    authDomain: "dns-verifier.firebaseapp.com",
+    projectId: "dns-verifier",
+    storageBucket: "dns-verifier.firebasestorage.app",
+    messagingSenderId: "849931378550",
+    appId: "1:849931378550:web:05aecd612f3f4043bb2457",
+    measurementId: "G-3EM9RDYYTZ"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app); // Use Firestore (or Realtime Database)
 
 function App() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [authToken, setAuthToken] = useState(localStorage.getItem("authToken") || null);
+    const [authError, setAuthError] = useState("");
+    const [isRegistering, setIsRegistering] = useState(false);
     const [file, setFile] = useState(null);
     const [columns, setColumns] = useState([]);
     const [selectedColumn, setSelectedColumn] = useState("");
     const [downloadLinks, setDownloadLinks] = useState([]);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [isUserAllowed, setIsUserAllowed] = useState(false); // Track if the user is allowed
 
+    // Check if the authenticated user is allowed
+    const checkIfUserIsAllowed = async (userEmail) => {
+        try {
+            const userDocRef = doc(db, "allowedUsers", userEmail); // Replace "allowedUsers" with your collection name
+            const userDoc = await getDoc(userDocRef);
+            return userDoc.exists(); // Return true if the user exists in the allowed list
+        } catch (error) {
+            console.error("Error checking allowed users:", error);
+            return false;
+        }
+    };
+
+    // Handle Firebase login
+    const handleFirebaseLogin = async (e) => {
+        e.preventDefault();
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // Check if the user is allowed
+            const isAllowed = await checkIfUserIsAllowed(user.email);
+            if (isAllowed) {
+                setIsUserAllowed(true);
+                setAuthToken(user.accessToken); // Use Firebase access token
+                localStorage.setItem("authToken", user.accessToken);
+                setAuthError("");
+            } else {
+                setAuthError("You are not authorized to access this application.");
+                handleLogout();
+            }
+        } catch (error) {
+            console.error("Firebase Auth Error:", error.message);
+            setAuthError(error.message);
+        }
+    };
+
+    // Handle logout
+    const handleLogout = () => {
+        setAuthToken(null);
+        setIsUserAllowed(false);
+        localStorage.removeItem("authToken");
+        auth.signOut(); // Sign out from Firebase
+    };
+
+    // Listen for auth state changes
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const isAllowed = await checkIfUserIsAllowed(user.email);
+                if (isAllowed) {
+                    setIsUserAllowed(true);
+                    setAuthToken(user.accessToken);
+                    localStorage.setItem("authToken", user.accessToken);
+                } else {
+                    handleLogout();
+                }
+            } else {
+                handleLogout();
+            }
+        });
+
+        return () => unsubscribe(); // Cleanup subscription
+    }, []);
+
+    // Rest of your existing code remains unchanged
     const handleFileChange = (event) => {
         const uploadedFile = event.target.files[0];
         setFile(uploadedFile);
@@ -30,16 +120,18 @@ function App() {
         }
 
         setUploadProgress(0);
-        setIsProcessing(false);
+        setIsProcessing(true);
 
         const formData = new FormData();
         formData.append("file", file);
         formData.append("column", selectedColumn);
 
         try {
-            setIsProcessing(true);
-            const response = await axios.post("https://dns-verifier-backend.onrender.com/upload", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
+            const response = await axios.post("http://localhost:5001/upload", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${authToken}`,
+                },
                 onUploadProgress: (progressEvent) => {
                     const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                     setUploadProgress(progress);
@@ -54,9 +146,92 @@ function App() {
         }
     };
 
+    // Only render the frontend if the user is allowed
+    if (!isUserAllowed) {
+        return (
+            <div className="container">
+                <h2>Email DNS Checker</h2>
+                <div className="auth-forms">
+                    {isRegistering ? (
+                        <>
+                            <h3>Register</h3>
+                            <form onSubmit={handleFirebaseLogin}>
+                                <div className="form-group">
+                                    <label>Email:</label>
+                                    <input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Password:</label>
+                                    <input
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <button type="submit" className="auth-button">
+                                    Register
+                                </button>
+                            </form>
+                            <p className="toggle-auth">
+                                Already have an account?{" "}
+                                <span onClick={() => setIsRegistering(false)}>Login here</span>
+                            </p>
+                        </>
+                    ) : (
+                        <>
+                            <h3>Login</h3>
+                            <form onSubmit={handleFirebaseLogin}>
+                                <div className="form-group">
+                                    <label>Email:</label>
+                                    <input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Password:</label>
+                                    <input
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <button type="submit" className="auth-button">
+                                    Login
+                                </button>
+                            </form>
+                            <p className="toggle-auth">
+                                Don't have an account?{" "}
+                                <span onClick={() => setIsRegistering(true)}>Register here</span>
+                            </p>
+                        </>
+                    )}
+
+                    {authError && <p className="error-message">{authError}</p>}
+                </div>
+            </div>
+        );
+    }
+
+    // Render the main application if the user is allowed
     return (
         <div className="container">
             <h2>Email DNS Checker</h2>
+            <div className="logout-section">
+                <button onClick={handleLogout} className="logout-button">
+                    Logout
+                </button>
+            </div>
+
             <div className="file-input">
                 <input type="file" accept=".csv" id="file-upload" onChange={handleFileChange} />
                 <label htmlFor="file-upload">Choose CSV File</label>
@@ -100,7 +275,7 @@ function App() {
                     {downloadLinks.map((link, index) => (
                         <a
                             key={index}
-                            href={`https://dns-verifier-backend.onrender.com/download/${link.file.split("/").pop()}`}
+                            href={`http://localhost:5001/download/${link.file.split("/").pop()}`}
                             download
                         >
                             Download {link.category} CSV
