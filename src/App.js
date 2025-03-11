@@ -3,7 +3,7 @@ import axios from "axios";
 import Papa from "papaparse";
 import "./styles.css";
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore"; // Use Firestore (or Realtime Database)
 
 // Firebase configuration (replace with your Firebase project config)
@@ -51,24 +51,65 @@ function App() {
     // Handle Firebase login
     const handleFirebaseLogin = async (e) => {
         e.preventDefault();
+        const trimmedEmail = email.trim();
+        const trimmedPassword = password.trim();
+        console.log("Trimmed Email:", trimmedEmail); // Debugging
+        console.log("Trimmed Password:", trimmedPassword); // Debugging
+    
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, trimmedEmail, trimmedPassword);
             const user = userCredential.user;
-
+    
             // Check if the user is allowed
             const isAllowed = await checkIfUserIsAllowed(user.email);
             if (isAllowed) {
                 setIsUserAllowed(true);
-                setAuthToken(user.accessToken); // Use Firebase access token
-                localStorage.setItem("authToken", user.accessToken);
+                const token = await user.getIdToken();
+                setAuthToken(token);
+                localStorage.setItem("authToken", token);
                 setAuthError("");
             } else {
-                setAuthError("You are not authorized to access this application.");
+                setAuthError("You are not authorized to access this application. Please ask Rishesh to give access!!");
                 handleLogout();
             }
         } catch (error) {
-            console.error("Firebase Auth Error:", error.message);
-            setAuthError(error.message);
+            console.error("Firebase Auth Error:", error);
+            if (error.code === 'auth/invalid-credential') {
+                setAuthError("Invalid email or password.");
+            } else {
+                setAuthError("An error occurred. Please try again.");
+            }
+        }
+    };
+
+    // Handle Firebase registration
+    const handleFirebaseRegister = async (e) => {
+        e.preventDefault();
+        const trimmedEmail = email.trim();
+        const trimmedPassword = password.trim();
+        console.log("Trimmed Email (Register):", trimmedEmail); // Debugging
+        console.log("Trimmed Password (Register):", trimmedPassword); // Debugging
+
+        try {
+            // Create a new user with email and password
+            const userCredential = await createUserWithEmailAndPassword(auth, trimmedEmail, trimmedPassword);
+            const user = userCredential.user;
+
+            // Optionally, you can add the user to Firestore or perform other actions
+            console.log("User registered successfully:", user);
+
+            // Automatically log in the user after registration
+            const token = await user.getIdToken();
+            setAuthToken(token);
+            localStorage.setItem("authToken", token);
+            setAuthError("");
+        } catch (error) {
+            console.error("Firebase Registration Error:", error);
+            if (error.code === 'auth/email-already-in-use') {
+                setAuthError("Email is already in use.");
+            } else {
+                setAuthError("An error occurred during registration.");
+            }
         }
     };
 
@@ -87,8 +128,9 @@ function App() {
                 const isAllowed = await checkIfUserIsAllowed(user.email);
                 if (isAllowed) {
                     setIsUserAllowed(true);
-                    setAuthToken(user.accessToken);
-                    localStorage.setItem("authToken", user.accessToken);
+                    const token = await user.getIdToken();
+                    setAuthToken(token);
+                    localStorage.setItem("authToken", token);
                 } else {
                     handleLogout();
                 }
@@ -155,7 +197,7 @@ function App() {
                     {isRegistering ? (
                         <>
                             <h3>Register</h3>
-                            <form onSubmit={handleFirebaseLogin}>
+                            <form onSubmit={handleFirebaseRegister}>
                                 <div className="form-group">
                                     <label>Email:</label>
                                     <input
