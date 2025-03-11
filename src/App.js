@@ -127,7 +127,7 @@ function App() {
         formData.append("column", selectedColumn);
 
         try {
-            const response = await axios.post("http://localhost:5001/upload", formData, {
+            const response = await axios.post("https://dns-verifier-backend.onrender.com/upload", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${authToken}`,
@@ -275,7 +275,7 @@ function App() {
                     {downloadLinks.map((link, index) => (
                         <a
                             key={index}
-                            href={`http://localhost:5001/download/${link.file.split("/").pop()}`}
+                            href={`https://dns-verifier-backend.onrender.com/download/${link.file.split("/").pop()}`}
                             download
                         >
                             Download {link.category} CSV
