@@ -35,6 +35,7 @@ function App() {
     const [uploadProgress, setUploadProgress] = useState(0);
     const [isProcessing, setIsProcessing] = useState(false);
     const [isUserAllowed, setIsUserAllowed] = useState(false); // Track if the user is allowed
+    const [isUploading, setIsUploading] = useState(false); // New state to track upload status
 
     // Check if the authenticated user is allowed
     const checkIfUserIsAllowed = async (userEmail) => {
@@ -142,7 +143,7 @@ function App() {
         return () => unsubscribe(); // Cleanup subscription
     }, []);
 
-    // Rest of your existing code remains unchanged
+    // Handle file change
     const handleFileChange = (event) => {
         const uploadedFile = event.target.files[0];
         setFile(uploadedFile);
@@ -155,12 +156,14 @@ function App() {
         });
     };
 
+    // Handle file upload
     const handleUpload = async () => {
         if (!file || !selectedColumn) {
             alert("Please select a file and column");
             return;
         }
 
+        setIsUploading(true); // Disable the upload button
         setUploadProgress(0);
         setIsProcessing(true);
 
@@ -184,6 +187,7 @@ function App() {
         } catch (error) {
             console.error("Error uploading file", error);
         } finally {
+            setIsUploading(false); // Re-enable the upload button
             setIsProcessing(false);
         }
     };
@@ -293,9 +297,9 @@ function App() {
             <button
                 className="upload-button"
                 onClick={handleUpload}
-                disabled={!file || !selectedColumn}
+                disabled={isUploading || !file || !selectedColumn} // Disable button when uploading
             >
-                Upload
+                {isUploading ? "Uploading..." : "Upload"} {/* Change button text when uploading */}
             </button>
 
             {uploadProgress > 0 && uploadProgress < 100 && (
