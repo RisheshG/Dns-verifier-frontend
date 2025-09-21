@@ -105,13 +105,15 @@ function App() {
                 <div className="download-links">
                     <h3>Download Results</h3>
                     {downloadLinks.map((link, index) => (
-                        <a
-                            key={index}
-                            href={`https://dns-verifier-backend.onrender.com/download/${link.file.split("/").pop()}`}
-                            download
-                        >
-                            Download {link.category} CSV
-                        </a>
+                        <div key={index} className="download-item">
+                            <span>{link.count} → </span>
+                            <a
+                                href={`https://dns-verifier-backend.onrender.com/download/${link.file.split("/").pop()}`}
+                                download
+                            >
+                                {link.category} CSV
+                            </a>
+                        </div>
                     ))}
                 </div>
             )}
