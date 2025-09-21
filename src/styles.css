@@ -1,376 +1,232 @@
-/* CSS Reset */
+/* RESET */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* CSS Variables for Color Scheme */
-  :root {
-    --primary-color: #ff6b6b;      /* Bold red/pink */
-    --secondary-color: #feca57;    /* Bright warm yellow/orange */
-    --accent-color: #48dbfb;       /* Vivid blue */
-    --text-color: #2d3436;         /* Dark grey for text */
-    --container-bg: rgba(255, 255, 255, 0.85);
-    --shadow-color: rgba(0, 0, 0, 0.2);
-    --transition-speed: 0.5s;
-  }
-  
-  /* Animated Moving Gradient Background for the Entire App */
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-    color: var(--text-color);
-    padding: 20px;
-    min-height: 100vh;
-  }
-  
-  /* Keyframes for Animated Background */
-  @keyframes gradientBG {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-  
-  /* Container with Glassmorphism and Fade-In Animation */
-  .container {
-    max-width: 900px;
-    margin: 60px auto;
-    padding: 40px;
-    background: var(--container-bg);
-    border-radius: 20px;
-    box-shadow: 0 12px 30px var(--shadow-color);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    animation: fadeInUp 1s ease-out both;
-  }
-  
-  /* Title Styling with Bold Colors and Text Shadow */
-  h2 {
-    text-align: center;
-    color: var(--primary-color);
-    margin-bottom: 30px;
-    font-size: 3rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.15);
-  }
-  
-  /* File Input Styling with Animated Label */
-  .file-input {
-    margin-bottom: 30px;
-    text-align: center;
-    position: relative;
-  }
-  
-  .file-input input[type="file"] {
-    opacity: 0;
-    position: absolute;
-    width: 0;
-    height: 0;
-  }
-  
-  .file-input label {
-    display: inline-block;
-    padding: 15px 30px;
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    color: #fff;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 1.2rem;
-    font-weight: 500;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-  }
-  
-  .file-input label:hover {
-    transform: scale(1.05);
-    box-shadow: 0 12px 25px var(--shadow-color);
-  }
-  
-  /* Select Dropdown Styling with Custom Arrow */
-  .select-container {
-    margin-bottom: 30px;
-    position: relative;
-  }
-  
-  .select-container select {
-    width: 100%;
-    padding: 15px 50px 15px 15px;
-    font-size: 1.2rem;
-    border: 2px solid var(--primary-color);
-    border-radius: 10px;
-    background-color: #fff;
-    color: var(--text-color);
-    cursor: pointer;
-    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
-    appearance: none;
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%232d3436"><path d="M4 6l4 4 4-4"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-  }
-  
-  .select-container select:focus {
-    outline: none;
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 10px var(--secondary-color);
-  }
-  
-  /* Upload Button Styling with a Subtle Lift on Hover */
-  .upload-button {
-    width: 100%;
-    padding: 18px;
-    font-size: 1.2rem;
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: background var(--transition-speed), transform var(--transition-speed);
-    margin-bottom: 30px;
-    font-weight: 600;
-  }
-  
-  .upload-button:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .upload-button:hover:not(:disabled) {
-    transform: translateY(-5px);
-  }
-  
-  /* Progress Bar Styling with Smooth Transitions */
-  .progress-container {
-    margin-top: 30px;
-    text-align: center;
-  }
-  
-  .progress-container progress {
-    width: 100%;
-    height: 20px;
-    border-radius: 10px;
-    background-color: #e0e0e0;
-    border: none;
-    overflow: hidden;
-  }
-  
-  .progress-container progress::-webkit-progress-bar {
-    background-color: #e0e0e0;
-    border-radius: 10px;
-  }
-  
-  .progress-container progress::-webkit-progress-value {
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    border-radius: 10px;
-    transition: width var(--transition-speed);
-  }
-  
-  .progress-container progress::-moz-progress-bar {
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    border-radius: 10px;
-  }
-  
-  /* Processing Message Styling with a Pulsing Effect */
-  .processing-message {
-    margin-top: 30px;
-    text-align: center;
-    font-style: italic;
-    color: var(--accent-color);
-    font-size: 1.3rem;
-    animation: pulse 1.5s infinite;
-  }
-  
-  /* Download Links Styling with Interactive Hover Effects */
-  .download-links {
-    margin-top: 30px;
-  }
-  
-  .download-links h3 {
-    text-align: center;
-    color: var(--primary-color);
-    margin-bottom: 20px;
-    font-size: 2.5rem;
-    font-weight: 600;
-  }
-  
-  .download-links a {
-    display: block;
-    padding: 15px;
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 50px;
-    margin-bottom: 15px;
-    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-    font-size: 1.2rem;
-    font-weight: 500;
-  }
-  
-  .download-links a:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px var(--shadow-color);
-  }
-  
-  /* Keyframes for Fade In Up Animation */
-  @keyframes fadeInUp {
-    0% {
-      opacity: 0;
-      transform: translateY(40px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Keyframes for Pulse Animation */
-  @keyframes pulse {
-    0% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.6;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .container {
-      margin: 20px;
-      padding: 20px;
-    }
-    
-    h2 {
-      font-size: 2.5rem;
-    }
-    
-    .upload-button {
-      padding: 15px;
-      font-size: 1rem;
-    }
-    
-    .select-container select, .file-input label {
-      font-size: 1rem;
-    }
-  }
-
-  .auth-forms {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 30px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.auth-forms h3 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 20px;
+/* COLOR PALETTE */
+:root {
+  --primary: #6c63ff; /* Indigo-violet */
+  --secondary: #4cc9f0; /* Cyan */
+  --accent: #f72585; /* Pinkish accent */
+  --text-dark: #2b2d42;
+  --text-light: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.15);
+  --shadow: rgba(0, 0, 0, 0.2);
+  --transition: 0.3s ease-in-out;
 }
 
-.form-group {
-    margin-bottom: 15px;
-    text-align: left;
+/* BACKGROUND */
+body {
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #6c63ff, #4cc9f0, #f72585, #3a0ca3);
+  background-size: 400% 400%;
+  animation: gradientFlow 15s ease infinite;
+  color: var(--text-dark);
+  padding: 20px;
 }
 
-.form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #555;
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-.form-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: all 0.3s ease;
+/* MAIN CONTAINER */
+.container {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 40px;
+  background: var(--card-bg);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 30px var(--shadow);
+  animation: fadeIn 1s ease-out both;
 }
 
-.form-group input:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+/* TITLE */
+h2 {
+  text-align: center;
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-.auth-button {
-    width: 100%;
-    padding: 10px;
-    background: #007bff;
-    color: #fff;
-    font-size: 18px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s ease;
+/* FILE INPUT */
+.file-input {
+  margin-bottom: 30px;
+  text-align: center;
+  position: relative;
 }
 
-.auth-button:hover {
-    background: #0056b3;
+.file-input input[type="file"] {
+  display: none;
 }
 
-.toggle-auth {
-    margin-top: 15px;
-    font-size: 14px;
-    color: #555;
-}
-
-.toggle-auth span {
-    color: #007bff;
-    cursor: pointer;
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
-
-.toggle-auth span:hover {
-    color: #0056b3;
-}
-
-.error-message {
-    margin-top: 10px;
-    color: red;
-    font-weight: bold;
-}
-
-.logout-button {
-  background-color: #ff4b5c; /* Red color like real-life logout buttons */
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 8px;
+.file-input label {
+  display: inline-block;
+  padding: 15px 40px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
 }
 
-.logout-button:hover {
-  background-color: #e03e4e; /* Slightly darker red on hover */
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-  transform: scale(1.05);
+.file-input label:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
 }
 
-.logout-button:active {
-  background-color: #c83745; /* Even darker when clicked */
-  transform: scale(0.98);
+/* SELECT DROPDOWN */
+.select-container {
+  margin-bottom: 25px;
 }
 
-  
+.select-container select {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.1rem;
+  border: 2px solid var(--primary);
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: var(--text-dark);
+  appearance: none;
+  outline: none;
+  transition: var(--transition);
+}
+
+.select-container select:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 8px var(--secondary);
+}
+
+/* UPLOAD BUTTON */
+.upload-button {
+  width: 100%;
+  padding: 16px;
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+  margin-bottom: 30px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+.upload-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.upload-button:hover:not(:disabled) {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+}
+
+/* PROGRESS BAR */
+.progress-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.progress-container progress {
+  width: 100%;
+  height: 18px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: none;
+}
+
+.progress-container progress::-webkit-progress-bar {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+.progress-container progress::-webkit-progress-value {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.progress-container progress::-moz-progress-bar {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 10px;
+}
+
+/* PROCESSING MESSAGE */
+.processing-message {
+  margin-top: 20px;
+  text-align: center;
+  color: var(--secondary);
+  font-size: 1.2rem;
+  font-style: italic;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* DOWNLOAD LINKS */
+.download-links {
+  margin-top: 30px;
+}
+
+.download-links h3 {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--text-light);
+  margin-bottom: 20px;
+}
+
+.download-links a {
+  display: block;
+  padding: 14px;
+  text-align: center;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--accent), var(--primary));
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: 15px;
+  font-weight: 500;
+  transition: var(--transition);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+.download-links a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .container {
+    margin: 20px;
+    padding: 25px;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+}
