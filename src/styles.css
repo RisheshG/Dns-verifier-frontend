@@ -7,13 +7,13 @@
 
 /* COLOR PALETTE */
 :root {
-  --primary: #6c63ff; /* Indigo-violet */
-  --secondary: #4cc9f0; /* Cyan */
-  --accent: #f72585; /* Pinkish accent */
-  --text-dark: #2b2d42;
-  --text-light: #ffffff;
-  --card-bg: rgba(255, 255, 255, 0.15);
-  --shadow: rgba(0, 0, 0, 0.2);
+  --primary: #1f2937; /* Dark gray for headings/buttons */
+  --secondary: #4b5563; /* Medium gray for borders */
+  --accent: #3b82f6; /* Soft blue for highlights/buttons */
+  --text-dark: #111827;
+  --text-light: #f9fafb;
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --shadow: rgba(0, 0, 0, 0.1);
   --transition: 0.3s ease-in-out;
 }
 
@@ -21,45 +21,34 @@
 body {
   font-family: "Poppins", sans-serif;
   min-height: 100vh;
-  background: linear-gradient(-45deg, #6c63ff, #4cc9f0, #f72585, #3a0ca3);
-  background-size: 400% 400%;
-  animation: gradientFlow 15s ease infinite;
+  background-color: #f3f4f6; /* light gray background */
   color: var(--text-dark);
   padding: 20px;
 }
 
-@keyframes gradientFlow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
 /* MAIN CONTAINER */
 .container {
-  max-width: 800px;
+  max-width: 700px;
   margin: 60px auto;
   padding: 40px;
   background: var(--card-bg);
-  border-radius: 20px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 12px 30px var(--shadow);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px var(--shadow);
   animation: fadeIn 1s ease-out both;
 }
 
 /* TITLE */
 h2 {
   text-align: center;
-  font-size: 2.8rem;
+  font-size: 2.4rem;
   font-weight: 700;
   margin-bottom: 40px;
-  color: var(--text-light);
-  letter-spacing: 1px;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+  color: var(--primary);
 }
 
 /* FILE INPUT */
 .file-input {
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   text-align: center;
   position: relative;
 }
@@ -70,20 +59,18 @@ h2 {
 
 .file-input label {
   display: inline-block;
-  padding: 15px 40px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: #fff;
+  padding: 12px 35px;
+  background-color: var(--primary);
+  color: var(--text-light);
   border-radius: 50px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
   transition: var(--transition);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
 }
 
 .file-input label:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+  background-color: var(--accent);
 }
 
 /* SELECT DROPDOWN */
@@ -93,47 +80,43 @@ h2 {
 
 .select-container select {
   width: 100%;
-  padding: 15px;
-  font-size: 1.1rem;
-  border: 2px solid var(--primary);
+  padding: 12px;
+  font-size: 1rem;
+  border: 1.5px solid var(--secondary);
   border-radius: 12px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: #ffffff;
   color: var(--text-dark);
-  appearance: none;
   outline: none;
   transition: var(--transition);
 }
 
 .select-container select:focus {
-  border-color: var(--secondary);
-  box-shadow: 0 0 8px var(--secondary);
+  border-color: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
 }
 
 /* UPLOAD BUTTON */
 .upload-button {
   width: 100%;
-  padding: 16px;
-  font-size: 1.2rem;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  padding: 14px;
+  font-size: 1.1rem;
+  background-color: var(--primary);
   color: #fff;
   border: none;
   border-radius: 50px;
   cursor: pointer;
   font-weight: 600;
   transition: var(--transition);
-  margin-bottom: 30px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  margin-bottom: 25px;
 }
 
 .upload-button:disabled {
-  background: #ccc;
+  background: #d1d5db; /* gray */
   cursor: not-allowed;
-  box-shadow: none;
 }
 
 .upload-button:hover:not(:disabled) {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  background-color: var(--accent);
 }
 
 /* PROGRESS BAR */
@@ -144,42 +127,30 @@ h2 {
 
 .progress-container progress {
   width: 100%;
-  height: 18px;
-  border-radius: 10px;
-  overflow: hidden;
+  height: 16px;
+  border-radius: 8px;
   border: none;
-}
-
-.progress-container progress::-webkit-progress-bar {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
+  background-color: #e5e7eb;
 }
 
 .progress-container progress::-webkit-progress-value {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  border-radius: 10px;
+  background-color: var(--accent);
+  border-radius: 8px;
   transition: width 0.3s ease;
 }
 
 .progress-container progress::-moz-progress-bar {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  border-radius: 10px;
+  background-color: var(--accent);
+  border-radius: 8px;
 }
 
 /* PROCESSING MESSAGE */
 .processing-message {
   margin-top: 20px;
   text-align: center;
-  color: var(--secondary);
-  font-size: 1.2rem;
+  color: var(--accent);
+  font-size: 1.1rem;
   font-style: italic;
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.6; }
-  100% { opacity: 1; }
 }
 
 /* DOWNLOAD LINKS */
@@ -189,34 +160,41 @@ h2 {
 
 .download-links h3 {
   text-align: center;
-  font-size: 2rem;
-  color: var(--text-light);
+  font-size: 1.6rem;
+  color: var(--primary);
   margin-bottom: 20px;
 }
 
+.download-links .download-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 15px;
+}
+
+.download-links .download-item span {
+  font-weight: 600;
+  margin-right: 10px;
+  color: var(--secondary);
+}
+
 .download-links a {
-  display: block;
-  padding: 14px;
-  text-align: center;
-  font-size: 1.1rem;
+  padding: 10px 20px;
+  font-size: 1rem;
   border-radius: 50px;
-  background: linear-gradient(135deg, var(--accent), var(--primary));
+  background-color: var(--accent);
   color: #fff;
   text-decoration: none;
-  margin-bottom: 15px;
-  font-weight: 500;
   transition: var(--transition);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
 }
 
 .download-links a:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+  background-color: var(--primary);
 }
 
 /* ANIMATIONS */
 @keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(30px); }
+  0% { opacity: 0; transform: translateY(20px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
