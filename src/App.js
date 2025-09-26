@@ -12,10 +12,11 @@ function App() {
     const [isProcessing, setIsProcessing] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
 
-    // Handle file change
     const handleFileChange = (event) => {
         const uploadedFile = event.target.files[0];
         setFile(uploadedFile);
+        setColumns([]);
+        setSelectedColumn("");
 
         Papa.parse(uploadedFile, {
             complete: (result) => {
@@ -27,7 +28,6 @@ function App() {
         });
     };
 
-    // Handle file upload
     const handleUpload = async () => {
         if (!file || !selectedColumn) {
             alert("Please select a file and column");
@@ -43,17 +43,29 @@ function App() {
         formData.append("column", selectedColumn);
 
         try {
-            const response = await axios.post("https://dns-verifier-backend.onrender.com/upload", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-                onUploadProgress: (progressEvent) => {
-                    const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                    setUploadProgress(progress);
-                },
-            });
+            const response = await axios.post(
+                "https://dns-verifier-backend.onrender.com/upload",
+                formData,
+                {
+                    headers: { "Content-Type": "multipart/form-data" },
+                    onUploadProgress: (progressEvent) => {
+                        const progress = Math.round(
+                            (progressEvent.loaded * 100) / progressEvent.total
+                        );
+                        setUploadProgress(progress);
+                    },
+                }
+            );
 
-            setDownloadLinks(response.data.downloadLinks);
+            // Sort downloadLinks to always show "All Records Found" first
+            const sortedLinks = response.data.downloadLinks.sort((a, b) =>
+                a.category === "All_Records_Found" ? -1 : 1
+            );
+
+            setDownloadLinks(sortedLinks);
         } catch (error) {
             console.error("Error uploading file", error);
+            alert("Error uploading file. Check console for details.");
         } finally {
             setIsUploading(false);
             setIsProcessing(false);
@@ -65,16 +77,26 @@ function App() {
             <h2>Email DNS Checker</h2>
 
             <div className="file-input">
-                <input type="file" accept=".csv" id="file-upload" onChange={handleFileChange} />
+                <input
+                    type="file"
+                    accept=".csv"
+                    id="file-upload"
+                    onChange={handleFileChange}
+                />
                 <label htmlFor="file-upload">Choose CSV File</label>
             </div>
 
             {columns.length > 0 && (
                 <div className="select-container">
-                    <select onChange={(e) => setSelectedColumn(e.target.value)}>
+                    <select
+                        value={selectedColumn}
+                        onChange={(e) => setSelectedColumn(e.target.value)}
+                    >
                         <option value="">Select Email Column</option>
                         {columns.map((col) => (
-                            <option key={col} value={col}>{col}</option>
+                            <option key={col} value={col}>
+                                {col}
+                            </option>
                         ))}
                     </select>
                 </div>
@@ -106,12 +128,15 @@ function App() {
                     <h3>Download Results</h3>
                     {downloadLinks.map((link, index) => (
                         <div key={index} className="download-item">
-                            <span>{link.count} → </span>
+                            <span>{link.count} emails → </span>
                             <a
                                 href={`https://dns-verifier-backend.onrender.com/download/${link.file.split("/").pop()}`}
                                 download
                             >
-                                {link.category} CSV
+                                {link.category === "All_Records_Found"
+                                    ? "All Records Found"
+                                    : "Missing Records"}{" "}
+                                CSV
                             </a>
                         </div>
                     ))}
